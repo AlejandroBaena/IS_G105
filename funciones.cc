@@ -88,12 +88,11 @@ bool Admin_machine::addMachine(){
 				return false;
 			}
 			else{										
-				string id_fichero = 0;
-				string ram_fichero = 0;
-				string nucleos_fichero = 0;
-				string grupo_fichero = 0;
-				string disponibilidad_fichero = 0;
-
+				string id_fichero ="";
+				string ram_fichero ="";
+				string nucleos_fichero ="";
+				string grupo_fichero ="";
+				string disponibilidad_fichero ="";
 				getline(f,id_fichero,'\n');								
 				while((!f.eof())&&(id_encontrado==0)){					
 					if(id_fichero==id_maquina_string){
@@ -142,14 +141,17 @@ bool Admin_user::registerUser(){
 	
 		string nombre_usuario;
 		string password;
-		int tipo_usuario;
+		string tipo_usuario = "0";
 		string nombre;
 		string apellido1;
 		string apellido2;
 		string correo;
-		int limite_nucleos;
-		int limite_ram;
-		int limite_dias;
+		string limite_nucleos = "0";
+		int limite_nucleos_int = 0;
+		string limite_ram = "";
+		int limite_ram_int = 0;
+		string limite_dias = "";
+		int limite_dias_int = 0;
 		int usuario_libre=0;
 		int usuario_encontrado=0;
 		
@@ -201,8 +203,13 @@ bool Admin_user::registerUser(){
 		cout<<"Introduce la contraseña: ";
 		cin>>password;
 
+		while((tipo_usuario!="1")&&(tipo_usuario!="2")&&(tipo_usuario!="3")){
 		cout<<"Introduce el tipo de usuario 1(Usuario), 2(Administrador de usuarios) o 3(Administrador de máquinas): ";
 		cin>>tipo_usuario;
+			if((tipo_usuario!="1")&&(tipo_usuario!="2")&&(tipo_usuario!="3")){
+				cout<<"Valor no válido.\n";
+			}
+		}
 		
 		cout<<"Introduce el nombre: ";
 		cin>>nombre;

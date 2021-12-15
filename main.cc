@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-//fl#include "funciones.cc"
 #include "class.h"
 using namespace std;
 
@@ -144,7 +143,7 @@ int main(){
 						cout<<endl;
 						//MENÚ ADMINISTRADOR máquinas
 						int opcion_admin_maquinas=0;
-						while(opcion_admin_maquinas!=1){
+						while(opcion_admin_maquinas!=2){
 							cout<<"---------------------------"<<endl;
 							cout<<"1. Registrar nueva máquina"<<endl;
 							cout<<"2. Cerrar sesión"<<endl;
