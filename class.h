@@ -67,6 +67,7 @@ public:
   bool modifyUser();
   bool deleteUser();
   bool registerUser();
+  bool listarUsuarios();
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -90,27 +91,7 @@ public:
   void showMachine();
 };
 
-//////////////////////////////////////////////////////////////////////////
 
-class Usuario :public Persona
-{
-private:
-	int limite_nucleos_{ 0 };
-	int limite_ram_{ 0 };
-	int limite_dias_{ 0 };
-public:
-  inline Usuario(string nombre_usuario, string password, int tipo_usuario, string nombre, string correo, int limite_nucleos, int limite_ram, int limite_dias):Persona(nombre_usuario, password, tipo_usuario, nombre, correo){
-  	limite_nucleos_=limite_nucleos;
-  	limite_ram_=limite_ram;
-	limite_dias_=limite_dias;
-  };
-  /*
-  inline int getLimite_ram(){ return limite_ram_; }
-  inline int getLimite_nucleos(){ return limite_nucleos_; }
-  inline int getLimite_dias(){ return limite_dias_; }
-  */
-
-};
 //////////////////////////////////////////////////////////////////////////
 
 class Maquina
@@ -135,8 +116,6 @@ public:
   inline void setNucleos(int nucleos){ nucleos_ = nucleos; }
 };
 
-//////////////////////////////////////////////////////////////////////////
-
 class Reserva
 {
 private:
@@ -159,8 +138,21 @@ public:
   inline int getFechaReserva(){ return fecha_; }
   inline void setFechaReserva(int fecha){ fecha_ = fecha; }
 };
+//////////////////////////////////////////////////////////////////////////
 
-int login(string, string, int*, string*, string*, int*, int*, int*);
-bool realizarReserva(Reserva solicitud);
+class Usuario :public Persona
+{
+private:
+	int limite_nucleos_{ 0 };
+	int limite_ram_{ 0 };
+	int limite_dias_{ 0 };
+public:
+  inline Usuario(string nombre_usuario, string password, int tipo_usuario, string nombre, string correo, int limite_nucleos, int limite_ram, int limite_dias):Persona(nombre_usuario, password, tipo_usuario, nombre, correo){
+  	limite_nucleos_=limite_nucleos;
+  	limite_ram_=limite_ram;
+	limite_dias_=limite_dias;
+  };
+  bool realizarReserva(Reserva r,int nucleos, int ram);
+};
 
 #endif

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include "class.h"
+#include "funciones.cc"
 using namespace std;
 
 int main(){
@@ -22,7 +22,17 @@ int main(){
 	int *puntero_limite_dias=&limite_dias;				
 	int inicio_sesion=0;															
 	int opcion=0;
-	
+	//Variables para la función realizar reserva
+	int id_maquina=0;
+	int nucleos_maquina=0;
+	int *puntero_nucleos_maquina=&nucleos_maquina;
+	int ram_maquina=0;
+	int *puntero_ram_maquina=&ram_maquina;
+	int nucleos_reserva=0;
+	int ram_reserva=0;
+	int fecha_reserva=0;
+	int nuevos_nucleos=0;
+	int nueva_ram=0;
 	//Mostramos el menú de opciones
 	while(opcion!=2){
 		cout<<"---------------------------"<<endl;
@@ -59,72 +69,57 @@ int main(){
 						cout<<endl;
 						//MENÚ USUARIO
 						int opcion_usuario=0;
-						while(opcion_usuario!=1){
+						while(opcion_usuario!=2){
 							cout<<"---------------------------"<<endl;
 							cout<<"OPCIONES DE USUARIO"<<endl;
 							cout<<"---------------------------"<<endl;
-							cout<<"1. Cerrar sesión"<<endl;
-							cout<<"---------------------------"<<endl;
-							cout<<"2. Realizar una reserva"<<endl;
+							cout<<"1. Realizar reserva"<<endl;
+							cout<<"2. Cerrar sesión"<<endl;
 							cout<<"---------------------------"<<endl;
 							cout<<"Introduce tu opción: ";
 							cin>>opcion_usuario;
 							cout<<endl;
 							switch(opcion_usuario){
-								case 1:
+								case 1:{
+									cout<<"Introduce la ID de la máquina a reservar"<<endl;
+									cin>>id_maquina;
+									if (buscarMaquina(id_maquina, puntero_nucleos_maquina, puntero_ram_maquina)){
+										cout<<"La máquina con ID: "<<id_maquina<<" tiene "<<nucleos_maquina<<" núcleos y "<<ram_maquina<<" de RAM."<<endl;
+										cout<<"Su límite de nucleos es de "<<limite_nucleos<<", su límite de RAM es de "<<limite_ram<<" y su límite de días es de "<<limite_dias<<endl;
+									}
+									nucleos_reserva=0;
+									ram_reserva=0;
+									fecha_reserva=0;
+									while((limite_nucleos<nucleos_reserva) || (nucleos_maquina<nucleos_reserva) || nucleos_reserva==0){
+										cout<<"Introduce el número de núcleos a reservar: ";
+										cin>>nucleos_reserva;
+									}
+									while((limite_ram<ram_reserva) || (ram_maquina<ram_reserva) || ram_reserva==0){
+										cout<<"Introduce el número de RAM a reservar: ";
+										cin>>ram_reserva;
+									}
+									while(limite_dias<fecha_reserva || fecha_reserva==0){
+										cout<<"Introduce el número de días a reservar: ";
+										cin>>fecha_reserva;
+									}
+									nuevos_nucleos=nucleos_maquina-nucleos_reserva;
+									nueva_ram=ram_maquina-ram_reserva;
+									Reserva r(investigador.getUsername(),id_maquina, ram_reserva, nucleos_reserva, fecha_reserva);
+									if(investigador.realizarReserva(r,nuevos_nucleos, nueva_ram)){
+										cout<<"Reserva realizada correctamente."<<endl;
+									}
+									else{
+										cout<<"Error en la realización de la reserva"<<endl;
+									}
+								}						
+								break;
+								
+								case 2:
 									cout<<"Sesión como "<<nombre_usuario<<" cerrada correctamente."<<endl;
 									cout<<endl;
 									nombre_usuario="";
 									tipo_usuario=0;
 									inicio_sesion=0;									
-								break;
-
-								case 2:
-								{
-									int id_maquina;
-  									int ram;
-									int nucleos;
-									int fecha;
-									
-									cout<<"Introduzca el id de la máquina que desea reservar ->";
-									cin>>id_maquina;
-									
-									cout<<"Introzca la ram que desea reservar de dicha máquina ->";
-									cin>>ram;
-									if (ram > limite_ram)
-									{
-										cout<<"ERROR : Desea realizar una reserva por encima de sus limites de usuario"<<endl;
-										exit(-1);
-									}
-									
-									cout<<"Introduzca la cantidad de núcleos que va a necesitar ->";
-									cin>>nucleos;
-									if (nucleos > limite_nucleos)
-									{
-										cout<<"ERROR : Desea realizar una reserva por encima de sus limites de usuario"<<endl;
-										exit(-1);
-									}
-									
-									cout<<"Indique cuántos días durará la reserva ->";
-									cin>>fecha;
-
-									if (fecha > limite_dias)
-									{
-										cout<<"ERROR : Desea realizar una reserva por encima de sus limites de usuario"<<endl;
-										exit(-1);
-									}
-
-									Reserva solicitud(nombre_usuario, id_maquina, ram, nucleos, fecha);
-
-									if (realizarReserva(solicitud))
-									{
-										cout<<"La reserva ha sido realizada comn éxito"<<endl;
-									}
-									else
-									{
-										cout<<"La reserva no ha podido realizarse"<<endl;
-									}
-								}
 								break;
 								
 								default:
@@ -145,10 +140,11 @@ int main(){
 						cout<<endl;
 						//MENÚ ADMINISTRADOR USUARIOS
 						int opcion_admin_usuario=0;
-						while(opcion_admin_usuario!=2){
+						while(opcion_admin_usuario!=3){
 							cout<<"---------------------------"<<endl;
 							cout<<"1. Registrar usuario"<<endl;
-							cout<<"2. Cerrar sesión"<<endl;
+							cout<<"2. Ver lista de usuarios"<<endl;
+							cout<<"3. Cerrar sesión"<<endl;
 							cout<<"---------------------------"<<endl;
 							cout<<"Introduce tu opción: ";
 							cin>>opcion_admin_usuario;
@@ -168,6 +164,12 @@ int main(){
 								break;
 								
 								case 2:
+									if(admin_usuarios.listarUsuarios()==false){
+										cout<<"La lista de usuarios está vacía."<<endl;
+									}									
+								break;
+								
+								case 3:
 									cout<<"Sesión como "<<nombre_usuario<<" cerrada correctamente."<<endl;
 									cout<<endl;
 									nombre_usuario="";

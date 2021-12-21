@@ -64,7 +64,47 @@ int login(string nombre_usuario, string password, int *puntero_tipo_usuario, str
 	f.close();
 	return inicio_sesion;					
 }
-
+bool buscarMaquina(int id_maquina, int *puntero_nucleos_maquina, int *puntero_ram_maquina){
+	int maquina_encontrada=0;
+	std::ifstream f("fichero_base_maquinas.txt");										
+	if(!f){												
+		std::cout<<"Error al abrir el fichero\n";
+		return false;
+	}
+	//Declaración de variables para la lectura del fichero									
+	string id_maquina_fichero="";						
+	string ram_maquina_fichero="";							
+	string nucleos_maquina_fichero="";
+	string grupo_maquina_fichero="";
+	string disponibilidad_maquina_fichero="";					
+	getline(f,id_maquina_fichero,'\n');			
+	while((!f.eof())&&(maquina_encontrada==0)){					
+		if(stoi(id_maquina_fichero)==id_maquina){				
+			getline(f,ram_maquina_fichero,'\n');
+			getline(f,nucleos_maquina_fichero,'\n');
+			getline(f,grupo_maquina_fichero,'\n');
+			getline(f,disponibilidad_maquina_fichero,'\n');
+			*puntero_ram_maquina=stoi(ram_maquina_fichero);
+			*puntero_nucleos_maquina=stoi(nucleos_maquina_fichero);
+			maquina_encontrada=1;
+			
+		}
+		else{									
+			getline(f,ram_maquina_fichero,'\n');
+			getline(f,nucleos_maquina_fichero,'\n');
+			getline(f,grupo_maquina_fichero,'\n');
+			getline(f,disponibilidad_maquina_fichero,'\n');
+			getline(f,id_maquina_fichero,'\n');
+		}
+	}	
+	f.close();
+	if (maquina_encontrada==1){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
 bool Admin_machine::addMachine(){
 
 		int id_maquina_{ 0 };
@@ -131,6 +171,7 @@ bool Admin_machine::addMachine(){
 				f<<ram_<<endl;
 				f<<nucleos_<<endl;
 				f<<grupo_<<endl;
+				f<<"1"<<endl;
 			}
 			f.close();
 			return true;	
@@ -251,170 +292,83 @@ bool Admin_user::registerUser(){
 			return true;	
 }
 
-bool realizarReserva(Reserva solicitud)
-{
-	string backup;
-	string linea;
-	string id_maquina_fich="";
-	string ram_fich="";
-	string nucleos_fich="";
-	string grupo_fich="";
-	string disponibilidad_fich="";
-	int encontrada=0;
-	int nueva_ram=0;
-	int nuevos_nucleos=0;
-	string copia;
+bool Usuario::realizarReserva(Reserva r,int nucleos, int ram){
+	//Declaración de variables para la lectura del fichero									
+	string id_maquina_fichero="";						
+	string ram_maquina_fichero="";							
+	string nucleos_maquina_fichero="";
+	string grupo_maquina_fichero="";
+	string disponibilidad_maquina_fichero="";
 
-	ifstream fich("fichero_base_maquinas.txt");
-	cout<<"Abriendo fich de maquinas..."<<endl;
-	if(!fich)
-	{												
-		cout<<"Error al abrir el fichero de las maquinas"<<endl;;
+	string id_maquina_modificar="";					
+	int ram_maquina_modificar=ram;							
+	int nucleos_maquina_modificar=nucleos;
+	string grupo_maquina_modificar="";
+	string disponibilidad_maquina_modificar="";
+	std::ifstream f("fichero_base_maquinas.txt");										
+	if(!f){												
+		std::cout<<"Error al abrir el fichero\n";
 		return false;
 	}
-	else
-	{
-  		getline(fich,id_maquina_fich,'\n');
-		while((!fich.eof()) && (encontrada==0))
-		{					
-			if(stoi(id_maquina_fich) == solicitud.getIDMaquina())
-			{
-				cout<<"Máquina encontrada"<<endl;
-				encontrada=1;
-				getline(fich,ram_fich,'\n');
-				getline(fich,nucleos_fich,'\n');
-				getline(fich,grupo_fich,'\n');
-				getline(fich,disponibilidad_fich,'\n');	
-			}
-			else
-			{
-				
-				getline(fich,ram_fich,'\n');
-				getline(fich,nucleos_fich,'\n');
-				getline(fich,grupo_fich,'\n');
-				getline(fich,disponibilidad_fich,'\n');
-				getline(fich,id_maquina_fich,'\n');
-			}
-			
-			
-
-			if (stoi(ram_fich) < solicitud.getRam())
-			{
-				cout<<"La máquina deseada dispone de menos ram de la que requiere en su reserva"<<endl;
-				fich.close();
-				return false;
-			}
-
-			if (stoi(nucleos_fich) < solicitud.getNucleos())
-			{
-				cout<<"La máquina deseada dispone de menos nucleos de los que requiere en su reserva"<<endl;
-				fich.close();
-				return false;
-			}
-		}	
+	std::ofstream fich("fichero_base_maquinas_nuevo.txt");										
+	if(!fich){												
+		std::cout<<"Error al abrir el fichero\n";
+		return false;
 	}
+	getline(f,id_maquina_fichero,'\n');			
+	while((!f.eof())){					
+		if(stoi(id_maquina_fichero)==r.getIDMaquina()){
+			id_maquina_modificar=id_maquina_fichero;			
+			getline(f,ram_maquina_fichero,'\n');
+			getline(f,nucleos_maquina_fichero,'\n');
+			getline(f,grupo_maquina_fichero,'\n');
+			grupo_maquina_modificar=grupo_maquina_fichero;
+			getline(f,disponibilidad_maquina_fichero,'\n');
+			disponibilidad_maquina_modificar=disponibilidad_maquina_fichero;
+			getline(f,id_maquina_fichero,'\n');
+		}
+		else{									
+			getline(f,ram_maquina_fichero,'\n');
+			getline(f,nucleos_maquina_fichero,'\n');
+			getline(f,grupo_maquina_fichero,'\n');
+			getline(f,disponibilidad_maquina_fichero,'\n');
+			
+			fich<<id_maquina_fichero<<endl;
+			fich<<ram_maquina_fichero<<endl;
+			fich<<nucleos_maquina_fichero<<endl;
+			fich<<grupo_maquina_fichero<<endl;
+			fich<<disponibilidad_maquina_fichero<<endl;
+			getline(f,id_maquina_fichero,'\n');
+		}
+	}	
+	f.close();
 	fich.close();
-	cout<<"Cerrando fich de maquinas..."<<endl;
-
-	ifstream fich_aux("fichero_base_maquinas.txt");
-	if (!fich_aux)
-	{
-		cout<<"Error al abrir el fich de maquinas"<<endl;
+	std::ofstream fichero("fichero_base_maquinas_nuevo.txt",ios::app);
+	if(!fichero){												
+		std::cout<<"Error al abrir el fichero\n";
 		return false;
 	}
-	else
-	{
-		
-
-		while(getline(fich_aux,linea,'\n'))
-		{
-			if (stoi(linea) == solicitud.getIDMaquina())
-			{
-				id_maquina_fich = linea;
-				linea = "";
-				getline(fich_aux,ram_fich,'\n');
-				getline(fich_aux,nucleos_fich,'\n');
-				getline(fich_aux,grupo_fich,'\n');
-				getline(fich_aux,disponibilidad_fich,'\n');
-			}
-
-			copia = copia + linea + "\n";
-		}
-		
-		nueva_ram = stoi(ram_fich) - solicitud.getRam();
-		if (nueva_ram == 0)
-		{
-			disponibilidad_fich= "0";
-		}
-		
-		nuevos_nucleos = stoi(nucleos_fich) - solicitud.getNucleos();
-		if (nuevos_nucleos == 0)
-		{
-			disponibilidad_fich= "0";
-		}
-	}
-
-	fich_aux.close();
-
-
-	ofstream fich_aux2("fichero_base_maquinas.txt");
-	if (!fich_aux2)
-	{
-		cout<<"Error al actualizar la base de datos de maquinas"<<endl;
-	}
-	else
-	{
-		fich_aux2<<copia<<endl;
-		fich_aux2<<id_maquina_fich<<endl;
-		fich_aux2<<nueva_ram<<endl;
-		fich_aux2<<nuevos_nucleos<<endl;
-		fich_aux2<<grupo_fich<<endl;
-		fich_aux2<<disponibilidad_fich<<endl;
-	}
-
-	fich_aux2.close();
-	cout<<"Base de datos de maquinas actualizada correctamente.."<<endl;
-
-
-
-	ifstream fich2("base_reservas.txt");
-	cout<<"Abriendo fich de reservas..."<<endl;
-	if (!fich2)
-	{
-		cout<<"Error al abrir el fichero de las reservas"<<endl;
+	fichero<<id_maquina_modificar<<endl;
+	fichero<<ram_maquina_modificar<<endl;
+	fichero<<nucleos_maquina_modificar<<endl;
+	fichero<<grupo_maquina_modificar<<endl;
+	fichero<<disponibilidad_maquina_modificar<<endl;
+	fichero.close();
+	
+	std::ofstream reservas("fichero_reservas.txt",ios::app);
+	if(!reservas){												
+		std::cout<<"Error al abrir el fichero\n";
 		return false;
 	}
-	else
-	{
-
-		while(getline(fich2, linea))
-		{
-			backup = backup + linea + "\n";
-		}
-	}
-	fich2.close();
-	cout<<"Cerrando fich de reservas..."<<endl;
-
-	ofstream fich3("base_reservas.txt");
-	cout<<"Abriendo fich de reservas de nuevo..."<<endl;
-	if (!fich3)
-	{
-		cout<<"Error al abrir el fichero de las reservas"<<endl;
-		return false;
-	}
-	else
-	{
-		fich3 << backup <<endl;
-		fich3 << solicitud.getNombreUsuario()<<endl;
-		fich3 << solicitud.getIDMaquina()<<endl;
-		fich3 << solicitud.getRam()<<endl;
-		fich3 << solicitud.getNucleos()<<endl;
-		fich3 << solicitud.getFechaReserva()<<endl;
-	}
-
-	fich3.close();
-	cout<<"Cerrando fich de reservas..."<<endl;
+	reservas<<r.getNombreUsuario()<<endl;
+	reservas<<r.getIDMaquina()<<endl;
+	reservas<<r.getRam()<<endl;
+	reservas<<r.getNucleos()<<endl;
+	reservas<<r.getFechaReserva()<<endl;
+	
+	reservas.close();
+	remove("fichero_base_maquinas.txt");
+	rename("fichero_base_maquinas_nuevo.txt","fichero_base_maquinas.txt");
 	return true;
-
-
 }
+
