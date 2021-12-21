@@ -104,6 +104,12 @@ public:
   	limite_ram_=limite_ram;
 	limite_dias_=limite_dias;
   };
+  /*
+  inline int getLimite_ram(){ return limite_ram_; }
+  inline int getLimite_nucleos(){ return limite_nucleos_; }
+  inline int getLimite_dias(){ return limite_dias_; }
+  */
+
 };
 //////////////////////////////////////////////////////////////////////////
 
@@ -129,6 +135,32 @@ public:
   inline void setNucleos(int nucleos){ nucleos_ = nucleos; }
 };
 
+//////////////////////////////////////////////////////////////////////////
+
+class Reserva
+{
+private:
+  string nombre_usuario_ { "null" };
+  int id_maquina_ { 0 };
+  int ram_ { 0 } ;
+  int nucleos_ { 0 } ;
+  int fecha_ { 0 } ;
+
+public:
+  inline Reserva(string nombre_usuario, int id_maquina, int ram, int nucleos, int fecha){ nombre_usuario_ = nombre_usuario; id_maquina_ = id_maquina; ram_ = ram; nucleos_ = nucleos; fecha_ = fecha; }
+  inline string getNombreUsuario(){ return nombre_usuario_;}
+  inline void setNombreUsuario(string nombre_usuario){ nombre_usuario_ = nombre_usuario; }
+  inline int getIDMaquina(){ return id_maquina_; }
+  inline void setIDMaquina(int id_maquina){ id_maquina_ = id_maquina; }
+  inline int getRam(){ return ram_; }
+  inline void setRam(int ram){ ram_ = ram; }
+  inline int getNucleos(){ return nucleos_; }
+  inline void setNucleos(int nucleos){ nucleos_ = nucleos; }
+  inline int getFechaReserva(){ return fecha_; }
+  inline void setFechaReserva(int fecha){ fecha_ = fecha; }
+};
+
 int login(string, string, int*, string*, string*, int*, int*, int*);
+bool realizarReserva(Reserva solicitud);
 
 #endif

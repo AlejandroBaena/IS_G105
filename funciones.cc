@@ -250,3 +250,108 @@ bool Admin_user::registerUser(){
 			f.close();
 			return true;	
 }
+
+bool realizarReserva(Reserva solicitud)
+{
+	string backup;
+	string linea;
+	ifstream fich("fichero_base_maquinas.txt");
+	cout<<"Abriendo fich de maquinas..."<<endl;
+	if(!fich)
+	{												
+		cout<<"Error al abrir el fichero de las maquinas"<<endl;;
+		return false;
+	}
+	else
+	{
+		string id_maquina_fich="";
+		string ram_fich="";
+  		string nucleos_fich="";
+  		string grupo_fich="";
+  		string disponibilidad_fich="";
+  		int encontrada=0;
+
+  		getline(fich,id_maquina_fich,'\n');
+		while((!fich.eof()) && (encontrada==0))
+		{					
+			if(stoi(id_maquina_fich) == solicitud.getIDMaquina())
+			{
+				cout<<"Máquina encontrada"<<endl;
+				encontrada=1;
+				getline(fich,ram_fich,'\n');
+				getline(fich,nucleos_fich,'\n');
+				getline(fich,grupo_fich,'\n');
+				getline(fich,disponibilidad_fich,'\n');	
+			}
+			else
+			{
+				
+				getline(fich,ram_fich,'\n');
+				getline(fich,nucleos_fich,'\n');
+				getline(fich,grupo_fich,'\n');
+				getline(fich,disponibilidad_fich,'\n');
+				getline(fich,id_maquina_fich,'\n');
+				
+			}
+			
+			
+
+			if (stoi(ram_fich) < solicitud.getRam())
+			{
+				cout<<"La máquina deseada dispone de menos ram de la que requiere en su reserva"<<endl;
+				fich.close();
+				return false;
+			}
+
+			if (stoi(nucleos_fich) < solicitud.getNucleos())
+			{
+				cout<<"La máquina deseada dispone de menos nucleos de los que requiere en su reserva"<<endl;
+				fich.close();
+				return false;
+			}
+		}	
+	}
+	fich.close();
+	cout<<"Cerrando fich de maquinas..."<<endl;
+
+	ifstream fich2("base_reservas.txt");
+	cout<<"Abriendo fich de reservas..."<<endl;
+	if (!fich2)
+	{
+		cout<<"Error al abrir el fichero de las reservas"<<endl;
+		return false;
+	}
+	else
+	{
+
+		while(getline(fich2, linea))
+		{
+			backup = backup + linea + "\n";
+		}
+	}
+	fich2.close();
+	cout<<"Cerrando fich de reservas..."<<endl;
+
+	ofstream fich3("base_reservas.txt");
+	cout<<"Abriendo fich de reservas de nuevo..."<<endl;
+	if (!fich3)
+	{
+		cout<<"Error al abrir el fichero de las reservas"<<endl;
+		return false;
+	}
+	else
+	{
+		fich3 << backup <<endl;
+		fich3 << solicitud.getNombreUsuario()<<endl;
+		fich3 << solicitud.getIDMaquina()<<endl;
+		fich3 << solicitud.getRam()<<endl;
+		fich3 << solicitud.getNucleos()<<endl;
+		fich3 << solicitud.getFechaReserva()<<endl;
+	}
+
+	fich3.close();
+	cout<<"Cerrando fich de reservas..."<<endl;
+	return true;
+
+
+}

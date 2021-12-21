@@ -65,6 +65,8 @@ int main(){
 							cout<<"---------------------------"<<endl;
 							cout<<"1. Cerrar sesión"<<endl;
 							cout<<"---------------------------"<<endl;
+							cout<<"2. Realizar una reserva"<<endl;
+							cout<<"---------------------------"<<endl;
 							cout<<"Introduce tu opción: ";
 							cin>>opcion_usuario;
 							cout<<endl;
@@ -75,6 +77,54 @@ int main(){
 									nombre_usuario="";
 									tipo_usuario=0;
 									inicio_sesion=0;									
+								break;
+
+								case 2:
+								{
+									int id_maquina;
+  									int ram;
+									int nucleos;
+									int fecha;
+									
+									cout<<"Introduzca el id de la máquina que desea reservar ->";
+									cin>>id_maquina;
+									
+									cout<<"Introzca la ram que desea reservar de dicha máquina ->";
+									cin>>ram;
+									if (ram > limite_ram)
+									{
+										cout<<"ERROR : Desea realizar una reserva por encima de sus limites de usuario"<<endl;
+										exit(-1);
+									}
+									
+									cout<<"Introduzca la cantidad de núcleos que va a necesitar ->";
+									cin>>nucleos;
+									if (nucleos > limite_nucleos)
+									{
+										cout<<"ERROR : Desea realizar una reserva por encima de sus limites de usuario"<<endl;
+										exit(-1);
+									}
+									
+									cout<<"Indique cuántos días durará la reserva ->";
+									cin>>fecha;
+
+									if (fecha > limite_dias)
+									{
+										cout<<"ERROR : Desea realizar una reserva por encima de sus limites de usuario"<<endl;
+										exit(-1);
+									}
+
+									Reserva solicitud(nombre_usuario, id_maquina, ram, nucleos, fecha);
+
+									if (realizarReserva(solicitud))
+									{
+										cout<<"La reserva ha sido realizada comn éxito"<<endl;
+									}
+									else
+									{
+										cout<<"La reserva no ha podido realizarse"<<endl;
+									}
+								}
 								break;
 								
 								default:
