@@ -22,3 +22,11 @@ correo@uco.es
 5
 5
 10
+usuario
+usuario
+1
+n a1 a2
+usuario@uco.es
+10
+10
+20

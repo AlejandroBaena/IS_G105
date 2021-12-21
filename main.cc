@@ -140,11 +140,10 @@ int main(){
 						cout<<endl;
 						//MENÚ ADMINISTRADOR USUARIOS
 						int opcion_admin_usuario=0;
-						while(opcion_admin_usuario!=3){
+						while(opcion_admin_usuario!=2){
 							cout<<"---------------------------"<<endl;
 							cout<<"1. Registrar usuario"<<endl;
-							cout<<"2. Ver lista de usuarios"<<endl;
-							cout<<"3. Cerrar sesión"<<endl;
+							cout<<"2. Cerrar sesión"<<endl;
 							cout<<"---------------------------"<<endl;
 							cout<<"Introduce tu opción: ";
 							cin>>opcion_admin_usuario;
@@ -162,13 +161,6 @@ int main(){
 										cout<<endl;
 									}							
 								break;
-								
-								case 2:
-									if(admin_usuarios.listarUsuarios()==false){
-										cout<<"La lista de usuarios está vacía."<<endl;
-									}									
-								break;
-								
 								case 3:
 									cout<<"Sesión como "<<nombre_usuario<<" cerrada correctamente."<<endl;
 									cout<<endl;
