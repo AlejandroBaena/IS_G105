@@ -30,3 +30,11 @@ usuario@uco.es
 10
 10
 20
+prueba
+prueba
+1
+p p1 p2
+p@uco.es
+10
+10
+7

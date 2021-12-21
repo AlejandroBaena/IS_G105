@@ -371,4 +371,92 @@ bool Usuario::realizarReserva(Reserva r,int nucleos, int ram){
 	rename("fichero_base_maquinas_nuevo.txt","fichero_base_maquinas.txt");
 	return true;
 }
+bool Admin_user::listarUsuarios(){
+	std::ifstream f("fichero_base_de_datos.txt");										
+	if(!f){												
+		std::cout<<"Error al abrir el fichero\n";
+		return false;
+	}
+	//Declaración de variables para la lectura del fichero									
+	string nombre_usuario_fichero="";						
+	string password_fichero="";							
+	string tipo_usuario_fichero="";
+	string nombre_fichero="";
+	string correo_fichero="";
+	string limite_nucleos_fichero="";
+	string limite_ram_fichero="";
+	string limite_dias_fichero="";	getline(f,nombre_usuario_fichero,'\n');																				
+	while(!f.eof()){
+		getline(f,password_fichero,'\n');
+		getline(f,tipo_usuario_fichero,'\n');
+		getline(f,nombre_fichero,'\n');
+		getline(f,correo_fichero,'\n');
+		getline(f,limite_nucleos_fichero,'\n');
+		getline(f,limite_ram_fichero,'\n');
+		getline(f,limite_dias_fichero,'\n');
+		
+		if(stoi(tipo_usuario_fichero)==1){
+			cout<<"-------------------------------------------------------"<<endl;
+			cout<<"Nombre de usuario: "<<nombre_usuario_fichero<<endl;
+			cout<<"Tipo usuario: "<<tipo_usuario_fichero<<"--> Usuario"<<endl;
+			cout<<"Nombre: "<<nombre_fichero<<endl;
+			cout<<"E-mail: "<<correo_fichero<<endl;
+			cout<<"Límite núcleos: "<<limite_nucleos_fichero<<endl;
+			cout<<"Límite RAM: "<<limite_ram_fichero<<endl;
+			cout<<"Límite días: "<<limite_dias_fichero<<endl;
+			cout<<endl;
+		}
+		else if(stoi(tipo_usuario_fichero)==2){
+			cout<<"-------------------------------------------------------"<<endl;
+			cout<<"Nombre de usuario: "<<nombre_usuario_fichero<<endl;
+			cout<<"Tipo usuario: "<<tipo_usuario_fichero<<"--> Administrador de usuarios"<<endl;
+			cout<<"Nombre: "<<nombre_fichero<<endl;
+			cout<<"E-mail: "<<correo_fichero<<endl;
+			cout<<endl;
+		}
+		else{
+			cout<<"-------------------------------------------------------"<<endl;
+			cout<<"Nombre de usuario: "<<nombre_usuario_fichero<<endl;
+			cout<<"Tipo usuario: "<<tipo_usuario_fichero<<"--> Administrador de máquinas"<<endl;
+			cout<<"Nombre: "<<nombre_fichero<<endl;
+			cout<<"E-mail: "<<correo_fichero<<endl;
+			cout<<endl;
+		}
+		getline(f,nombre_usuario_fichero,'\n');
+							
+	}	
+	f.close();
+	return true;				
+}					
+
+bool listarMaquinas(){
+	std::ifstream f("fichero_base_maquinas.txt");										
+	if(!f){												
+		std::cout<<"Error al abrir el fichero\n";
+		return false;
+	}
+	//Declaración de variables para la lectura del fichero									
+	string id_maquina_fichero="";						
+	string ram_maquina_fichero="";							
+	string nucleos_maquina_fichero="";
+	string grupo_maquina_fichero="";
+	string disponibilidad_maquina_fichero="";	getline(f,id_maquina_fichero,'\n');																					
+	while(!f.eof()){			
+			getline(f,ram_maquina_fichero,'\n');
+			getline(f,nucleos_maquina_fichero,'\n');
+			getline(f,grupo_maquina_fichero,'\n');
+			getline(f,disponibilidad_maquina_fichero,'\n');
+			cout<<"-------------------------------------------------------"<<endl;
+			cout<<"ID: "<<id_maquina_fichero<<endl;
+			cout<<"RAM: "<<ram_maquina_fichero<<endl;
+			cout<<"Núcleos: "<<nucleos_maquina_fichero<<endl;
+			cout<<"Grupo: "<<grupo_maquina_fichero<<endl;
+			cout<<"Disponibilidad 1(disponible) y 0(No disponible): "<<disponibilidad_maquina_fichero<<endl;
+			cout<<endl;
+			getline(f,id_maquina_fichero,'\n');
+							
+	}	
+	f.close();
+	return true;
+}
 

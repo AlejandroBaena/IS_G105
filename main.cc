@@ -69,18 +69,24 @@ int main(){
 						cout<<endl;
 						//MENÚ USUARIO
 						int opcion_usuario=0;
-						while(opcion_usuario!=2){
+						while(opcion_usuario!=3){
 							cout<<"---------------------------"<<endl;
 							cout<<"OPCIONES DE USUARIO"<<endl;
 							cout<<"---------------------------"<<endl;
-							cout<<"1. Realizar reserva"<<endl;
-							cout<<"2. Cerrar sesión"<<endl;
+							cout<<"1. Listar máquinas"<<endl;
+							cout<<"2. Realizar reserva"<<endl;
+							cout<<"3. Cerrar sesión"<<endl;
 							cout<<"---------------------------"<<endl;
 							cout<<"Introduce tu opción: ";
 							cin>>opcion_usuario;
 							cout<<endl;
 							switch(opcion_usuario){
-								case 1:{
+							
+								case 1:
+									listarMaquinas();									
+								break;
+								
+								case 2:{
 									cout<<"Introduce la ID de la máquina a reservar"<<endl;
 									cin>>id_maquina;
 									if (buscarMaquina(id_maquina, puntero_nucleos_maquina, puntero_ram_maquina)){
@@ -114,7 +120,7 @@ int main(){
 								}						
 								break;
 								
-								case 2:
+								case 3:
 									cout<<"Sesión como "<<nombre_usuario<<" cerrada correctamente."<<endl;
 									cout<<endl;
 									nombre_usuario="";
@@ -140,10 +146,11 @@ int main(){
 						cout<<endl;
 						//MENÚ ADMINISTRADOR USUARIOS
 						int opcion_admin_usuario=0;
-						while(opcion_admin_usuario!=2){
+						while(opcion_admin_usuario!=3){
 							cout<<"---------------------------"<<endl;
 							cout<<"1. Registrar usuario"<<endl;
-							cout<<"2. Cerrar sesión"<<endl;
+							cout<<"2. Listar usuarios"<<endl;
+							cout<<"3. Cerrar sesión"<<endl;
 							cout<<"---------------------------"<<endl;
 							cout<<"Introduce tu opción: ";
 							cin>>opcion_admin_usuario;
@@ -161,6 +168,11 @@ int main(){
 										cout<<endl;
 									}							
 								break;
+								
+								case 2:
+									admin_usuarios.listarUsuarios();							
+								break;
+								
 								case 3:
 									cout<<"Sesión como "<<nombre_usuario<<" cerrada correctamente."<<endl;
 									cout<<endl;
@@ -187,10 +199,11 @@ int main(){
 						cout<<endl;
 						//MENÚ ADMINISTRADOR máquinas
 						int opcion_admin_maquinas=0;
-						while(opcion_admin_maquinas!=2){
+						while(opcion_admin_maquinas!=3){
 							cout<<"---------------------------"<<endl;
 							cout<<"1. Registrar nueva máquina"<<endl;
-							cout<<"2. Cerrar sesión"<<endl;
+							cout<<"2. Listar máquinas"<<endl;
+							cout<<"3. Cerrar sesión"<<endl;
 							cout<<"---------------------------"<<endl;
 							cout<<"Introduce tu opción: ";
 							cin>>opcion_admin_maquinas;
@@ -209,8 +222,11 @@ int main(){
 									}							
 								break;
 
-
 								case 2:
+									listarMaquinas();									
+								break;
+
+								case 3:
 									cout<<"Sesión como "<<nombre_usuario<<" cerrada correctamente."<<endl;
 									cout<<endl;
 									nombre_usuario="";
