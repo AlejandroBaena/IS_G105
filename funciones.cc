@@ -255,6 +255,16 @@ bool realizarReserva(Reserva solicitud)
 {
 	string backup;
 	string linea;
+	string id_maquina_fich="";
+	string ram_fich="";
+	string nucleos_fich="";
+	string grupo_fich="";
+	string disponibilidad_fich="";
+	int encontrada=0;
+	int nueva_ram=0;
+	int nuevos_nucleos=0;
+	string copia;
+
 	ifstream fich("fichero_base_maquinas.txt");
 	cout<<"Abriendo fich de maquinas..."<<endl;
 	if(!fich)
@@ -264,13 +274,6 @@ bool realizarReserva(Reserva solicitud)
 	}
 	else
 	{
-		string id_maquina_fich="";
-		string ram_fich="";
-  		string nucleos_fich="";
-  		string grupo_fich="";
-  		string disponibilidad_fich="";
-  		int encontrada=0;
-
   		getline(fich,id_maquina_fich,'\n');
 		while((!fich.eof()) && (encontrada==0))
 		{					
@@ -291,7 +294,6 @@ bool realizarReserva(Reserva solicitud)
 				getline(fich,grupo_fich,'\n');
 				getline(fich,disponibilidad_fich,'\n');
 				getline(fich,id_maquina_fich,'\n');
-				
 			}
 			
 			
@@ -313,6 +315,67 @@ bool realizarReserva(Reserva solicitud)
 	}
 	fich.close();
 	cout<<"Cerrando fich de maquinas..."<<endl;
+
+	ifstream fich_aux("fichero_base_maquinas.txt");
+	if (!fich_aux)
+	{
+		cout<<"Error al abrir el fich de maquinas"<<endl;
+		return false;
+	}
+	else
+	{
+		
+
+		while(getline(fich_aux,linea,'\n'))
+		{
+			if (stoi(linea) == solicitud.getIDMaquina())
+			{
+				id_maquina_fich = linea;
+				linea = "";
+				getline(fich_aux,ram_fich,'\n');
+				getline(fich_aux,nucleos_fich,'\n');
+				getline(fich_aux,grupo_fich,'\n');
+				getline(fich_aux,disponibilidad_fich,'\n');
+			}
+
+			copia = copia + linea + "\n";
+		}
+		
+		nueva_ram = stoi(ram_fich) - solicitud.getRam();
+		if (nueva_ram == 0)
+		{
+			disponibilidad_fich= "0";
+		}
+		
+		nuevos_nucleos = stoi(nucleos_fich) - solicitud.getNucleos();
+		if (nuevos_nucleos == 0)
+		{
+			disponibilidad_fich= "0";
+		}
+	}
+
+	fich_aux.close();
+
+
+	ofstream fich_aux2("fichero_base_maquinas.txt");
+	if (!fich_aux2)
+	{
+		cout<<"Error al actualizar la base de datos de maquinas"<<endl;
+	}
+	else
+	{
+		fich_aux2<<copia<<endl;
+		fich_aux2<<id_maquina_fich<<endl;
+		fich_aux2<<nueva_ram<<endl;
+		fich_aux2<<nuevos_nucleos<<endl;
+		fich_aux2<<grupo_fich<<endl;
+		fich_aux2<<disponibilidad_fich<<endl;
+	}
+
+	fich_aux2.close();
+	cout<<"Base de datos de maquinas actualizada correctamente.."<<endl;
+
+
 
 	ifstream fich2("base_reservas.txt");
 	cout<<"Abriendo fich de reservas..."<<endl;
